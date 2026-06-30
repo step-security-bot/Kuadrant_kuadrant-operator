@@ -3,7 +3,7 @@ ARG WASM_SHIM_IMAGE=quay.io/kuadrant/wasm-shim:latest
 FROM ${WASM_SHIM_IMAGE} AS wasm-shim
 
 # Build the manager binary
-FROM --platform=$BUILDPLATFORM golang:1.25 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.25@sha256:f188e8c16ea47a8b22d2bdcf6d9bcd07b63ea7876c199749c07bf31e0ab33bad AS builder
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
@@ -62,7 +62,7 @@ RUN set -e; \
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:nonroot
+FROM gcr.io/distroless/static:nonroot@sha256:963fa6c544fe5ce420f1f54fb88b6fb01479f054c8056d0f74cc2c6000df5240
 WORKDIR /
 COPY --from=builder /workspace/manager .
 COPY --from=builder /workspace/extensions /extensions
